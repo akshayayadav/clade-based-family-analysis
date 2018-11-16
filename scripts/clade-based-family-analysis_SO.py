@@ -101,7 +101,7 @@ def compare_species_compositions(ingrp_clade_species_dict, species_dict):
 	else:
 		return(0)
 
-#ignoring unrooted trees - unrooted are multifucation at the root
+#ignoring trees with multifucation at the root
 def detect_multifurcation(fam_tree):
 	root = fam_tree.get_tree_root()
 	outgroups = root.get_children()
@@ -131,85 +131,6 @@ def read_profile_file(profile_fileName):
 #execute the workflow for a given family tree file
 def process_family_tree(fam_tree_fileName, profile_fileName):
 
-	outgrp_regex_str, species_dict = read_profile_file(profile_fileName)
-	outgrp_re = re.compile(outgrp_regex_str)
-
-	#for lgf5 families
-	#outgrp_re = re.compile(r'arath|prupe|solly|cucsa|vitvi')
-
-	#for lgf5 families
-	#species_dict={"glyma":2, "phavu":2, "vigan":2, "vigra":2, "vigun":2, "cajca":2, "medtr":2, "cicar":2, "tripr":2, "lotja":2, "lupan":2, "aradu":2, "araip":2, "arahy":2}
-
-
-
-
-	#for orthofinder families
-	#outgrp_re = re.compile(r'prupe\_pep\_prupe|cucsa\_pep\_cucsa')
-
-	#for orthofinder families
-	#species_dict={"glyma_pep_glyma":2, "phavu_pep_phavu":2, "vigan_pep_vigan":2, "vigra_pep_vigra":2, "vigun_pep_vigun":2, "cajca_pep_cajca":2, "medtr_pep_medtr":2, "cicar_pep_cicar":2, "lotja_pep_lotja":2, "lupan_pep_lupan":2, "arahy_pep_arahy":2}
-
-
-	#for orthofinder cerca-bauto
-	#outgrp_re = re.compile(r'nissc\_nissc')
-
-	#for orthofinder cerca-bauto
-	#species_dict={"cerca_cerca":2, "bauto_bauto":2 }
-	#species_dict={"cerca_cerca":2, "bauto_bauto":1 }
-	#species_dict={"cerca_cerca":1, "bauto_bauto":2 }
-
-	#for orthofinder chafa-mimpu
-	#outgrp_re = re.compile(r'nissc\_nissc')
-
-	#for orthofinder chafa-mimpu
-        #species_dict={"chafa_chafa":2, "mimpu_mimpu":2 }
-        #species_dict={"chafa_chafa":2, "mimpu_mimpu":1 }
-        #species_dict={"chafa_chafa":1, "mimpu_mimpu":2 }
-
-
-	
-	#for cerca-bauto
-	#outgrp_re = re.compile(r'adu|aip|ath|cfa|car|csa|gma|lja|lan|mtr|mpu|nsc|pvu|ppe|sly|tpr|vun|vvi')
-
-	#for cerca-bauto
-	#species_dict={"cca":2, "bto":2 }
-	#species_dict={"cca":2, "bto":1 }
-	#species_dict={"cca":1, "bto":2 }
-
-
-
-	#for chafa-mimpu
-	#outgrp_re = re.compile(r'adu|aip|ath|bto|cca|car|csa|gma|lja|lan|mtr|nsc|pvu|ppe|sly|tpr|vun|vvi')
-	
-	#for chafa-mimpu
-	#species_dict={"cfa":2, "mpu":2}
-	#species_dict={"cfa":2, "mpu":1}
-	#species_dict={"cfa":1, "mpu":2}
-
-	
-
-	#for legumes
-	#outgrp_re = re.compile(r'ath|ppe|sly|csa|vvi')
-
-	#for legumes
-	#species_dict={"gma":2, "pvu":2, "vun":2, "mtr":2, "car":2, "tpr":2, "lja":2, "lan":2, "adu":2, "aip":2, "bto":2, "cca":2, "cfa":2, "mpu":2, "nsc":2}
-
-
-	#for chafa-mimpu-papil
-	#outgrp_re = re.compile(r'ath|bto|cca|ppe|sly|csa|vvi')
-
-	#for chafa-mimpu-papil
-	#species_dict={"gma":2, "pvu":2, "vun":2, "mtr":2, "car":2, "tpr":2, "lja":2, "lan":2, "adu":2, "aip":2, "cfa":2, "mpu":2, "nsc":2}
-
-
-	#for papil
-	#outgrp_re = re.compile(r'ath|bto|cca|cfa|mpu|ppe|sly|csa|vvi')
-
-	#for papil
-	#species_dict={"gma":2, "pvu":2, "vun":2, "mtr":2, "car":2, "tpr":2, "lja":2, "lan":2, "adu":2, "aip":2, "nsc":2}
-	
-
-
 	fam_tree = PhyloTree(fam_tree_fileName, format=1)
 	if not (detect_multifurcation(fam_tree)):
 		return 0
@@ -223,7 +144,11 @@ def read_fam_tree_files_from_directory(fam_tree_dirName, profile_fileName):
 	for fam_tree_fileName in os.listdir(fam_tree_dirName):
 		process_family_tree(fam_tree_dirName+"/"+fam_tree_fileName, profile_fileName)
 
+#####################################################################################################################
+#location of the directory containing rooted family trees
 fam_tree_dirName = sys.argv[1]
+
+#location of the profile file. Look in the profiles  directory for examples. To detects largest clades containing at least 2 cercis and 2 bauhinia sequences, use the profile file "cca2-bto2.profile"
 profile_fileName = sys.argv[2]
 read_fam_tree_files_from_directory(fam_tree_dirName, profile_fileName)
 
