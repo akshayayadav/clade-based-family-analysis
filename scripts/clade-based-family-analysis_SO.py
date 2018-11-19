@@ -131,6 +131,9 @@ def read_profile_file(profile_fileName):
 #execute the workflow for a given family tree file
 def process_family_tree(fam_tree_fileName, profile_fileName):
 
+	outgrp_regex_str, species_dict = read_profile_file(profile_fileName)
+	outgrp_re = re.compile(outgrp_regex_str)
+
 	fam_tree = PhyloTree(fam_tree_fileName, format=1)
 	if not (detect_multifurcation(fam_tree)):
 		return 0
